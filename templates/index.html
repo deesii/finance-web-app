@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    
+<h1>Summary for {{users[1]}} <!--users is a tuple not a dictionary or an object-->
+    <!--{% for user in users %} 
+        {{user[1]}}
+    {% endfor %}-->
+</h1> 
+
+<div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Total value of shares</th>
+                <th>Cash balance</th>
+                <th>Total value of shares and cash</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${{portfolio_total | round(2)}}</td>
+                <td>${{'%.2f' | format(users[3])}}</td>
+                <td>${{grand_total | round(2)}}</td>
+            </tr>
+    
+        </tbody>
+    
+
+    </table>
+</div>
+
+<div>
+    <br>
+    <table>
+        <thead> <h2>Portfolio of Stocks</h2>
+            <tr>
+                <th>Stock</th>
+                <th>No. of shares</th>
+                <th>Value per share ($)</th>
+                <th>Total value ($)</th>
+                <th>Buy</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in portfolio %}
+            <tr>
+                <td>{{ row["symbol"]}}</td>
+                <td>{{ row["sum_shares"]}}</td>
+                <td>{{ row["price_per_share"] | round(2)}}</td> <!--another method to round to 2 d.p in jinja-->
+                <td>{{ row["total_value"] | round(2)}}</td>
+                <td>
+                    <form action = "/" method="post">
+                        <div class="mb-3">
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="stock_buy" name="stock_buy" placeholder="No. stock to buy" type="text">
+                            <input type="hidden" id="stock_symbol" name="stock_symbol" value="{{row['symbol']}}">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </form>
+                </td> 
+
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>  
+    
+{% endblock %}

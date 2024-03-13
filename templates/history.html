@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Transaction History
+{% endblock %}
+
+{% block main %}
+    
+<h1>Transactions for {{users[0]}} </h1> <!--users is a tuple not a dictionary or an object-->
+
+<div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Date and time</th>
+                <th>Stock</th>
+                <th>Price per share ($)</th>
+                <th>No. of shares</th>
+                <th>Total price ($)</th>
+                <th>Purchase / Sale</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction[1]}}</td>
+                <td>{{ transaction[3]}}</td>
+                <td>{{ transaction[4] | round(2)}}</td> <!--another method to round to 2 d.p in jinja-->
+                <td>{{ transaction[5] | abs}}</td>
+                <td>{{ transaction[6] | round(2)}}</td>
+                {% if transaction[5] > 0 %}
+                <td>Purchase</td>
+                {% else %}
+                <td>Sale</td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+
+        </tbody>
+        
+        
+    </table>
+</div>
+
+{% endblock %}
+

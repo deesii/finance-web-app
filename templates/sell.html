@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    
+<h1>Summary for {{users[1]}} <!--users is a tuple not a dictionary or an object-->
+    <!--{% for user in users %} 
+        {{user[1]}}
+    {% endfor %}-->
+</h1> 
+
+<div>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Total value of shares</th>
+                <th>Cash balance</th>
+                <th>Total value of shares and cash</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${{portfolio_total | round(2)}}</td>
+                <td>${{'%.2f' | format(users[3])}}</td>
+                <td>${{grand_total | round(2)}}</td>
+            </tr>
+    
+        </tbody>
+    
+
+    </table>
+</div>
+
+<div>
+    <br>
+    <table>
+        <thead> <h2>Portfolio of Stocks</h2>
+            <tr>
+                <th>Stock</th>
+                <th>No. of shares</th>
+                <th>Price per share ($)</th>
+                <th>Total value ($)</th>
+                <th>Sell</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in portfolio %}
+            <tr>
+                <td>{{ row["symbol"]}}</td>
+                <td>{{ row["sum_shares"]}}</td>
+                <td>{{ row["price_per_share"] | round(2)}}</td> <!--another method to round to 2 d.p in jinja-->
+                <td>{{ row["total_value"] | round(2)}}</td>
+                <td>
+                    <form action = "/sell" method="post">
+                        <select name="stock_sell_option" id="dropdown">
+                            <option disabled selected>Stock to sell</option>
+                            {% for stock in range(0, row["sum_shares"] +1) %}
+                                <option value ="{{row['symbol']}}|{{stock}}">{{stock}}</option>    
+                            {% endfor %}       
+                        </select>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </form>
+                </td> 
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>  
+    
+{% endblock %}
